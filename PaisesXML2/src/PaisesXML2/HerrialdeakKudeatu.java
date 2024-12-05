@@ -37,8 +37,8 @@ public class HerrialdeakKudeatu {
         return herria.getKontinentea();
     }
 	
-	public static void mostrarContinentes(List<Kontinenteak> kontinenteak) {
-        for (Kontinenteak kontinentea : kontinenteak) {
+	public static void erakutsiKontinenteak(List<Kontinenteak> kontinenteaks) {
+        for (Kontinenteak kontinentea : kontinenteaks) {
             System.out.println(kontinentea.getIzenaString()); 
         }
     }
