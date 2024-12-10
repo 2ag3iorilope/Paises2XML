@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Kontinenteak>
+    <Kontinentea azalera="3.037E7" biztanleria="1460000000" herrialdeakKop="54" izena="Africa">
+        <Herria independentziaData="1962-03-03" izena="Argelia" kapitala="Argel" kodea="213" populazioa="2.7959E7"/>
+        <Herria independentziaData="1993-05-24" izena="Eritrea" kapitala="Asmara" kodea="291" populazioa="3400000.0"/>
+        <Herria independentziaData="1960-06-26" izena="Madagascar" kapitala="Antananarivo" kodea="261" populazioa="1.3651E7"/>
+        <Herria independentziaData="1960-09-22" izena="Mali" kapitala="Bamaco" kodea="223" populazioa="9788000.0"/>
+    </Kontinentea>
+    <Kontinentea azalera="4.2549E7" biztanleria="1050000000" herrialdeakKop="35" izena="America">
+        <Herria independentziaData="1811-05-14" izena="Paraguay" kapitala="Asuncion" kodea="595" populazioa="4828000.0"/>
+    </Kontinentea>
+    <Kontinentea azalera="4.4579E7" biztanleria="475000000" herrialdeakKop="49" izena="Asia">
+        <Herria independentziaData="1991-08-30" izena="Azerbayan" kapitala="Baku" kodea="994" populazioa="7510000.0"/>
+        <Herria independentziaData="1958-07-14" izena="Irak" kapitala="Bagdad" kodea="964" populazioa="2.0097E7"/>
+        <Herria independentziaData="1923-10-29" izena="Turquia" kapitala="Ankara" kodea="90" populazioa="6.1058E7"/>
+    </Kontinentea>
+    <Kontinentea azalera="1.018E7" biztanleria="750000000" herrialdeakKop="44" izena="Europa">
+        <Herria independentziaData="1993-03-14" izena="Andorra" kapitala="Andorra La Vieja" kodea="376" populazioa="64000.0"/>
+        <Herria independentziaData="1830-02-03" izena="Grecia" kapitala="Atenas" kodea="30" populazioa="1.0467E7"/>
+        <Herria independentziaData="1581-07-26" izena="Holanda" kapitala="Amsterdam" kodea="31" populazioa="1.546E7"/>
+    </Kontinentea>
+    <Kontinentea azalera="8526000.0" biztanleria="44000000" herrialdeakKop="14" izena="Oceania">
+        <Herria independentziaData="1962-01-01" izena="Samoa Occidental" kapitala="Apia" kodea="684" populazioa="165000.0"/>
+    </Kontinentea>
+</Kontinenteak>
