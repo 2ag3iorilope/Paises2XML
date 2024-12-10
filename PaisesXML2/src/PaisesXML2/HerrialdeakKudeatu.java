@@ -4,6 +4,8 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Scanner;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -93,6 +95,110 @@ public class HerrialdeakKudeatu {
             e.printStackTrace();
         }
     }
+    public void addPaisToContinent() {
+        Scanner scanner = new Scanner(System.in);
+
+       
+        ErakutsiErabilgarriKontinenteak();
+
+        
+        System.out.print("Sartu Herriaren Kodea: ");
+        String codigo = scanner.nextLine();
+        
+        System.out.print("Sartu Herriaren izena: ");
+        String nombrePais = scanner.nextLine();
+        
+        System.out.print("Sartu bizi esperantza: ");
+        int esperanzaVida = scanner.nextInt();
+        
+        System.out.print("Sartu Poblazioa: ");
+        double poblacion = scanner.nextDouble();
+        
+        System.out.print("Sartu kapitala: ");
+        scanner.nextLine();
+        String capital = scanner.nextLine();
+        
+        System.out.print("Sartu sortze data (formatua: yyyy-MM-dd): ");
+        String fechaIndependencia = scanner.nextLine();
+        
+        
+        LocalDate fecha = LocalDate.parse(fechaIndependencia, DateTimeFormatter.ISO_DATE);
+
+       
+        System.out.print("Sartu nahi duzun kontinentearen zenbakia: ");
+        int continenteIndex = scanner.nextInt();
+
+        try {
+            
+            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(xmlFile);
+
+         
+            doc.getDocumentElement().normalize();
+
+           
+            NodeList continentesList = doc.getElementsByTagName("Kontinentea");
+            if (continenteIndex < 1 || continenteIndex > continentesList.getLength()) {
+                System.out.println("Kontinente zenbaki desegokia.");
+                return;
+            }
+
+            Element continenteElement = (Element) continentesList.item(continenteIndex - 1); 
+
+            
+            Element paisElement = doc.createElement("Herria");
+
+           
+            paisElement.setAttribute("kodea", codigo);
+            paisElement.setAttribute("izena", nombrePais);
+            paisElement.setAttribute("biziesperantza", String.valueOf(esperanzaVida));
+            paisElement.setAttribute("kapitala", capital);
+            paisElement.setAttribute("independentziaData", fecha.format(DateTimeFormatter.ISO_DATE));
+
+        
+            continenteElement.appendChild(paisElement);
+
+           
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml"));
+            transformer.transform(source, result);
+
+            System.out.println("Herri berria ondo gehitu da ondorengo kontinentera: " + continenteElement.getAttribute("izena") + ".");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void ErakutsiErabilgarriKontinenteak() {
+        try {
+           
+            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(xmlFile);
+
+          
+            doc.getDocumentElement().normalize();
+
+        
+            Element root = doc.getDocumentElement();
+
+          
+            NodeList continentesList = doc.getElementsByTagName("Kontinentea");
+            System.out.println("Erabilgarri dauden Kontinenteak:");
+            for (int i = 0; i < continentesList.getLength(); i++) {
+                Element continente = (Element) continentesList.item(i);
+                System.out.println("- " + continente.getAttribute("izena"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void ErakutsiXML() {
         try {
             

@@ -8,6 +8,9 @@ public class main {
 		sortuHerrialdeakKudeatu.SortuXML();
 		sortuHerrialdeakKudeatu.ErakutsiXML();
 		
+		sortuHerrialdeakKudeatu.addPaisToContinent();
+		sortuHerrialdeakKudeatu.ErakutsiXML();
+		
 
 	}
 
