@@ -4,7 +4,6 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -12,15 +11,19 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class HerrialdeakKudeatu {
 
     public HerrialdeakKudeatu() {
+       
+    }
+
+    public void SortuXML() {
         try {
-         
+           
             Kontinenteak africa = new Kontinenteak("Africa", 30370000, 54, 1460000000);
             Kontinenteak america = new Kontinenteak("America", 42549000, 35, 1050000000);
             Kontinenteak asia = new Kontinenteak("Asia", 44579000, 49, 475000000);
@@ -28,7 +31,7 @@ public class HerrialdeakKudeatu {
             Kontinenteak oceania = new Kontinenteak("Oceania", 8526000, 14, 44000000);
             List<Kontinenteak> kontinenteaks = List.of(africa, america, asia, europa, oceania);
 
-         
+          
             List<Herriak> herriakList = List.of(
                 new Herriak("376", "Andorra", 0, LocalDate.of(1993, 3, 14), 64000, "Andorra La Vieja", europa),
                 new Herriak("213", "Argelia", 70, LocalDate.of(1962, 3, 3), 27959000, "Argel", africa),
@@ -44,16 +47,14 @@ public class HerrialdeakKudeatu {
                 new Herriak("90", "Turquia", 67, LocalDate.of(1923, 10, 29), 61058000, "Ankara", asia)
             );
 
-          
+            
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.newDocument();
 
-       
             Element root = doc.createElement("Kontinenteak");
             doc.appendChild(root);
 
-            
             for (Kontinenteak kontinentea : kontinenteaks) {
                 Element kontinenteElement = doc.createElement("Kontinentea");
                 root.appendChild(kontinenteElement);
@@ -63,7 +64,6 @@ public class HerrialdeakKudeatu {
                 kontinenteElement.setAttribute("herrialdeakKop", String.valueOf(kontinentea.getPais_Kop()));
                 kontinenteElement.setAttribute("biztanleria", String.valueOf(kontinentea.getPoblazioa()));
 
-          
                 for (Herriak herria : herriakList) {
                     if (herria.getKontinentea().equals(kontinentea)) {
                         Element herriaElement = doc.createElement("Herria");
@@ -78,7 +78,7 @@ public class HerrialdeakKudeatu {
                 }
             }
 
-      
+  
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -89,6 +89,46 @@ public class HerrialdeakKudeatu {
 
             System.out.println("Xml fitxategia ondo sortu da: kontinenteak.xml");
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void ErakutsiXML() {
+        try {
+            
+            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(xmlFile);
+
+         
+            doc.getDocumentElement().normalize();
+
+        
+            Element root = doc.getDocumentElement();
+
+       
+            NodeList continentesList = doc.getElementsByTagName("Kontinentea");
+            for (int i = 0; i < continentesList.getLength(); i++) {
+                Element continente = (Element) continentesList.item(i);
+
+                System.out.println("Kontinentea: " + continente.getAttribute("izena"));
+                System.out.println("\tAzalera: " + continente.getAttribute("azalera"));
+                System.out.println("\tHerrialdeak kopurua: " + continente.getAttribute("herrialdeakKop"));
+                System.out.println("\tBiztanleria: " + continente.getAttribute("biztanleria"));
+
+            
+                NodeList paisesList = continente.getElementsByTagName("Herria");
+                for (int j = 0; j < paisesList.getLength(); j++) {
+                    Element pais = (Element) paisesList.item(j);
+                    System.out.println("\t\tHerria: " + pais.getAttribute("izena"));
+                    System.out.println("\t\t\tKodea: " + pais.getAttribute("kodea"));
+                    System.out.println("\t\t\tPopulazioa: " + pais.getAttribute("populazioa"));
+                    System.out.println("\t\t\tKapitala: " + pais.getAttribute("kapitala"));
+                    System.out.println("\t\t\tIndependentzia Data: " + pais.getAttribute("independentziaData"));
+                }
+                System.out.println();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
