@@ -96,6 +96,22 @@ public class HerrialdeakKudeatu {
             e.printStackTrace();
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public void addPaisToContinent() {
         Scanner scanner = new Scanner(System.in);
 
@@ -155,6 +171,7 @@ public class HerrialdeakKudeatu {
             paisElement.setAttribute("kodea", codigo);
             paisElement.setAttribute("izena", nombrePais);
             paisElement.setAttribute("biziesperantza", String.valueOf(esperanzaVida));
+            paisElement.setAttribute("Poblazioa", String.valueOf(poblacion));
             paisElement.setAttribute("kapitala", capital);
             paisElement.setAttribute("SortzeData", fecha.format(DateTimeFormatter.ISO_DATE));
 
@@ -177,47 +194,73 @@ public class HerrialdeakKudeatu {
     
     public void BilatuEtaErakutsiKodeBidez() {
         try {
-         
+          
             File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
 
-          
+  
             doc.getDocumentElement().normalize();
 
-           
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Sartu bilatu nahi duzun herriaren kodea: ");
-            String codigoBuscado = scanner.nextLine();
+            NodeList kontinenteakList = doc.getElementsByTagName("Kontinentea");
+
+            System.out.println("Kontinenteak eskuragarri daude:");
+            for (int i = 0; i < kontinenteakList.getLength(); i++) {
+                Element kontinenteaElement = (Element) kontinenteakList.item(i);
+                System.out.println((i + 1) + ". " + kontinenteaElement.getAttribute("izena"));
+            }
 
          
-            NodeList herriakList = doc.getElementsByTagName("Herria");
-            boolean encontrado = false;
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Aukeratu kontinente bat (1-" + kontinenteakList.getLength() + "): ");
+            int aukera = scanner.nextInt();
+            scanner.nextLine();
 
-            for (int i = 0; i < herriakList.getLength(); i++) {
-                Element herriaElement = (Element) herriakList.item(i);
-                String codigo = herriaElement.getAttribute("kodea");
+      
+            if (aukera < 1 || aukera > kontinenteakList.getLength()) {
+                System.out.println("Aukera ez da baliozkoa!");
+                return;
+            }
 
-                if (codigo.equals(codigoBuscado)) {
+         
+            Element kontinenteaElement = (Element) kontinenteakList.item(aukera - 1);
+            String kontinenteaIzena = kontinenteaElement.getAttribute("izena");
+
+         
+            System.out.println("\n=========================================");
+            System.out.println(kontinenteaIzena.toUpperCase() + " KONTINENTEA");
+            System.out.println("=========================================");
+
+           
+            NodeList herriakList = kontinenteaElement.getElementsByTagName("Herria");
+
+        
+            if (herriakList.getLength() == 0) {
+                System.out.println("Ez dago herririk kontinente honetan.");
+            } else {
+               
+                System.out.printf("%-10s %-20s %-15s %-20s %-15s %-20s%n",
+                        "Kodea", "Izena", "Poblazioa", "Kapitala", "SortzeData", "Bizi Esperantza");
+                System.out.println("-------------------------------------------------------------------------------");
+
+            
+                for (int i = 0; i < herriakList.getLength(); i++) {
+                    Element herriaElement = (Element) herriakList.item(i);
+
                   
-                    System.out.println("Herria aurkitu da:");
-                    System.out.println("Kodea: " + herriaElement.getAttribute("kodea"));
-                    System.out.println("Izena: " + herriaElement.getAttribute("izena"));
-                    System.out.println("Poblazioa: " + herriaElement.getAttribute("populazioa"));
-                    System.out.println("Kapitala: " + herriaElement.getAttribute("kapitala"));
-                    System.out.println("SortzeData: " + herriaElement.getAttribute("SortzeData"));
-                    System.out.println("Bizi Esperantza : " + herriaElement.getAttribute("BiziEsperantza"));
-                    encontrado = true;
-                    break;
+                    String kodea = herriaElement.getAttribute("kodea");
+                    String izena = herriaElement.getAttribute("izena");
+                    String populazioa = herriaElement.getAttribute("populazioa");
+                    String kapitala = herriaElement.getAttribute("kapitala");
+                    String sortzeData = herriaElement.getAttribute("SortzeData");
+                    String biziEsperantza = herriaElement.getAttribute("BiziEsperantza");
+
+             
+                    System.out.printf("%-10s %-20s %-15s %-20s %-15s %-20s%n",
+                            kodea, izena, populazioa, kapitala, sortzeData, biziEsperantza);
                 }
             }
-
-         
-            if (!encontrado) {
-                System.out.println("No se encontró ningún país con el código: " + codigoBuscado);
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
