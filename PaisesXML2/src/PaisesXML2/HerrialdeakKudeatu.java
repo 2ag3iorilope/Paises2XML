@@ -291,6 +291,67 @@ public class HerrialdeakKudeatu {
             e.printStackTrace();
         }
     }
+    public void BilatuEtaErakutsiPalabraClave() {
+        try {
+           
+            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(xmlFile);
+
+            doc.getDocumentElement().normalize();
+
+            
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Sartu bilatu nahi duzun herriaren izena edo hitz gako bat: ");
+            String palabraClave = scanner.nextLine().toLowerCase(); 
+
+       
+            NodeList kontinenteakList = doc.getElementsByTagName("Kontinentea");
+
+            boolean encontrado = false;
+
+        
+            for (int i = 0; i < kontinenteakList.getLength(); i++) {
+                Element kontinenteaElement = (Element) kontinenteakList.item(i);
+                String kontinenteIzena = kontinenteaElement.getAttribute("izena");
+
+            
+                NodeList herriakList = kontinenteaElement.getElementsByTagName("Herria");
+
+             
+                for (int j = 0; j < herriakList.getLength(); j++) {
+                    Element herriaElement = (Element) herriakList.item(j);
+                    String paisIzena = herriaElement.getAttribute("izena").toLowerCase();
+
+                 
+                    if (paisIzena.contains(palabraClave)) {
+                        if (!encontrado) {
+                            System.out.println("\nKontinentea: " + kontinenteIzena);
+                            encontrado = true;
+                        }
+
+                    
+                        System.out.println("\nHerria: " + herriaElement.getAttribute("izena"));
+                        System.out.println("Kodea: " + herriaElement.getAttribute("kodea"));
+                        System.out.println("Poblazioa: " + herriaElement.getAttribute("populazioa"));
+                        System.out.println("Kapitala: " + herriaElement.getAttribute("kapitala"));
+                        System.out.println("SortzeData: " + herriaElement.getAttribute("SortzeData"));
+                        System.out.println("Bizi Esperantza: " + herriaElement.getAttribute("BiziEsperantza"));
+                        System.out.println("-----------------------------------");
+                    }
+                }
+            }
+
+        
+            if (!encontrado) {
+                System.out.println("Ez da aurkitu herririk izenarekin: " + palabraClave);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     public void ErakutsiXML() {
         try {

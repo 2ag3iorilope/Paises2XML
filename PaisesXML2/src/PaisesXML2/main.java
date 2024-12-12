@@ -54,6 +54,14 @@ public class main {
 	                        System.out.println("Lehenengo XML fitxategia sortu behar duzu!");
 	                    }
 	                    break;
+	                case 5:
+	                    if (xmlSortua) {
+	                        sortuHerrialdeakKudeatu.BilatuEtaErakutsiPalabraClave();
+	                    } else {
+	                        System.out.println("Lehenengo XML fitxategia sortu behar duzu!");
+	                    }
+	                    break;
+	                    
 
 	                case 0:
 	                    System.out.println("Programatik irteten...");
