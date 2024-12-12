@@ -75,7 +75,8 @@ public class HerrialdeakKudeatu {
                         herriaElement.setAttribute("izena", herria.getIzenaString());
                         herriaElement.setAttribute("populazioa", String.valueOf(herria.getPoblazioa()));
                         herriaElement.setAttribute("kapitala", herria.getKapitala());
-                        herriaElement.setAttribute("independentziaData", herria.getDataSortuDate().format(DateTimeFormatter.ISO_DATE));
+                        herriaElement.setAttribute("BiziEsperantza", String.valueOf(herria.getBiziEsperantza()));
+                        herriaElement.setAttribute("SortzeData", herria.getDataSortuDate().format(DateTimeFormatter.ISO_DATE));
                     }
                 }
             }
@@ -155,7 +156,7 @@ public class HerrialdeakKudeatu {
             paisElement.setAttribute("izena", nombrePais);
             paisElement.setAttribute("biziesperantza", String.valueOf(esperanzaVida));
             paisElement.setAttribute("kapitala", capital);
-            paisElement.setAttribute("independentziaData", fecha.format(DateTimeFormatter.ISO_DATE));
+            paisElement.setAttribute("SortzeData", fecha.format(DateTimeFormatter.ISO_DATE));
 
         
             continenteElement.appendChild(paisElement);
@@ -173,6 +174,55 @@ public class HerrialdeakKudeatu {
             e.printStackTrace();
         }
     }
+    
+    public void BilatuEtaErakutsiKodeBidez() {
+        try {
+         
+            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(xmlFile);
+
+          
+            doc.getDocumentElement().normalize();
+
+           
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Sartu bilatu nahi duzun herriaren kodea: ");
+            String codigoBuscado = scanner.nextLine();
+
+         
+            NodeList herriakList = doc.getElementsByTagName("Herria");
+            boolean encontrado = false;
+
+            for (int i = 0; i < herriakList.getLength(); i++) {
+                Element herriaElement = (Element) herriakList.item(i);
+                String codigo = herriaElement.getAttribute("kodea");
+
+                if (codigo.equals(codigoBuscado)) {
+                  
+                    System.out.println("Herria aurkitu da:");
+                    System.out.println("Kodea: " + herriaElement.getAttribute("kodea"));
+                    System.out.println("Izena: " + herriaElement.getAttribute("izena"));
+                    System.out.println("Poblazioa: " + herriaElement.getAttribute("populazioa"));
+                    System.out.println("Kapitala: " + herriaElement.getAttribute("kapitala"));
+                    System.out.println("SortzeData: " + herriaElement.getAttribute("SortzeData"));
+                    System.out.println("Bizi Esperantza : " + herriaElement.getAttribute("BiziEsperantza"));
+                    encontrado = true;
+                    break;
+                }
+            }
+
+         
+            if (!encontrado) {
+                System.out.println("No se encontró ningún país con el código: " + codigoBuscado);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void ErakutsiErabilgarriKontinenteak() {
         try {
            
@@ -231,7 +281,8 @@ public class HerrialdeakKudeatu {
                     System.out.println("\t\t\tKodea: " + pais.getAttribute("kodea"));
                     System.out.println("\t\t\tPopulazioa: " + pais.getAttribute("populazioa"));
                     System.out.println("\t\t\tKapitala: " + pais.getAttribute("kapitala"));
-                    System.out.println("\t\t\tIndependentzia Data: " + pais.getAttribute("independentziaData"));
+                    System.out.println("\t\t\tBiziEsperantza: " + pais.getAttribute("BiziEsperantza"));
+                    System.out.println("\t\t\tSortzeData: " + pais.getAttribute("SortzeData"));
                 }
                 System.out.println();
             }
