@@ -301,6 +301,75 @@ public class HerrialdeakKudeatu {
             e.printStackTrace();
         }
     }
+    public void BilatuHerriaIzena() {
+        try {
+           
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Sartu herriaren izena (parte bat): ");
+            String inputIzena = scanner.nextLine().trim().toLowerCase();  
+          
+            String desktopPath = System.getProperty("user.home") + "/Desktop/kontinenteak.xml";
+            File xmlFile = new File(desktopPath);
+
+           
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(xmlFile);
+
+          
+            doc.getDocumentElement().normalize();
+
+           
+            NodeList kontinenteakList = doc.getElementsByTagName("Kontinentea");
+
+          
+            boolean encontrado = false;
+
+       
+            for (int i = 0; i < kontinenteakList.getLength(); i++) {
+                Element kontinenteaElement = (Element) kontinenteakList.item(i);
+                String kontinenteIzena = kontinenteaElement.getAttribute("izena");
+
+              
+                NodeList herriakList = kontinenteaElement.getElementsByTagName("Herria");
+
+             
+                for (int j = 0; j < herriakList.getLength(); j++) {
+                    Element herriaElement = (Element) herriakList.item(j);
+                    String izena = herriaElement.getAttribute("izena").toLowerCase(); 
+
+                   
+                    if (izena.contains(inputIzena)) {
+                        String codigoPais = herriaElement.getAttribute("kodea");
+                        String populazioa = herriaElement.getAttribute("populazioa");
+                        String kapitala = herriaElement.getAttribute("kapitala");
+                        String sortzeData = herriaElement.getAttribute("SortzeData");
+                        String biziEsperantza = herriaElement.getAttribute("BiziEsperantza");
+
+                       
+                        System.out.println("\n=========================================");
+                        System.out.println("Informazioa: " + izena);
+                        System.out.println("Kontinentea: " + kontinenteIzena);
+                        System.out.println("=========================================");
+                        System.out.printf("%-20s %-15s %-20s %-15s %-20s%n", 
+                                "Izena", "Poblazioa", "Kapitala", "SortzeData", "Bizi Esperantza");
+                        System.out.println("-------------------------------------------------------------------------------");
+                        System.out.printf("%-20s %-15s %-20s %-15s %-20s%n",
+                                izena, populazioa, kapitala, sortzeData, biziEsperantza);
+                        encontrado = true;
+                    }
+                }
+            }
+
+           
+            if (!encontrado) {
+                System.out.println("Ez da aurkitu herririk izenarekin: " + inputIzena);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     public void BilatuEtaErakutsiKodeBidez() {
         try {

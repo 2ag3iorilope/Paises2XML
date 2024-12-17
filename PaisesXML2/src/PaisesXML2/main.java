@@ -19,6 +19,7 @@ public class main {
 	            System.out.println("3. Gehitu herrialdea kontinente batera");
 	            System.out.println("4. Ikusi Kontinenteko Herrialdeak");
 	            System.out.println("5. Bilatu Herrialdea Kode Bidez");
+	            System.out.println("6. Bilatu Herrialdea Izen Bidez");
 	            System.out.println("0. Irten");
 	            System.out.print("Aukeratu aukera: ");
 
@@ -61,6 +62,13 @@ public class main {
 	                    case 5:
 	                        if (xmlSortua) {
 	                            sortuHerrialdeakKudeatu.BilatuHerriaKodea();
+	                        } else {
+	                            System.out.println("Lehenengo XML fitxategia sortu behar duzu!");
+	                        }
+	                        break;
+	                    case 6:
+	                        if (xmlSortua) {
+	                            sortuHerrialdeakKudeatu.BilatuHerriaIzena();
 	                        } else {
 	                            System.out.println("Lehenengo XML fitxategia sortu behar duzu!");
 	                        }
