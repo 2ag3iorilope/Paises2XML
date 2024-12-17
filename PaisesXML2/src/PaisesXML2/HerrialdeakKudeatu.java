@@ -25,7 +25,6 @@ public class HerrialdeakKudeatu {
 
     public void SortuXML() {
         try {
-           
             Kontinenteak africa = new Kontinenteak("Africa", 30370000, 54, 1460000000);
             Kontinenteak america = new Kontinenteak("America", 42549000, 35, 1050000000);
             Kontinenteak asia = new Kontinenteak("Asia", 44579000, 49, 475000000);
@@ -33,7 +32,6 @@ public class HerrialdeakKudeatu {
             Kontinenteak oceania = new Kontinenteak("Oceania", 8526000, 14, 44000000);
             List<Kontinenteak> kontinenteaks = List.of(africa, america, asia, europa, oceania);
 
-          
             List<Herriak> herriakList = List.of(
                 new Herriak("376", "Andorra", 0, LocalDate.of(1993, 3, 14), 64000, "Andorra La Vieja", europa),
                 new Herriak("213", "Argelia", 70, LocalDate.of(1962, 3, 3), 27959000, "Argel", africa),
@@ -46,64 +44,66 @@ public class HerrialdeakKudeatu {
                 new Herriak("223", "Mali", 50, LocalDate.of(1960, 9, 22), 9788000, "Bamaco", africa),
                 new Herriak("595", "Paraguay", 68, LocalDate.of(1811, 5, 14), 4828000, "Asuncion", america),
                 new Herriak("684", "Samoa Occidental", 68, LocalDate.of(1962, 1, 1), 165000, "Apia", oceania),
-                new Herriak("90", "Turquia", 67, LocalDate.of(1923, 10, 29), 61058000, "Ankara", asia)
+                new Herriak("90", "Turkia", 67, LocalDate.of(1923, 10, 29), 61058000, "Ankara", asia)
             );
 
-            
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.newDocument();
+            Document doc;
 
-            Element root = doc.createElement("Kontinenteak");
-            doc.appendChild(root);
+          
+            String desktopPath = System.getProperty("user.home") + "/Desktop/kontinenteak.xml";
+            File xmlFile = new File(desktopPath);
 
-            for (Kontinenteak kontinentea : kontinenteaks) {
-                Element kontinenteElement = doc.createElement("Kontinentea");
-                root.appendChild(kontinenteElement);
+            if (xmlFile.exists()) {
+                
+                doc = builder.parse(xmlFile);
+                System.out.println("Fitxategia existitzen da, erabiltzen...");
+            } else {
+             
+                doc = builder.newDocument();
+                Element root = doc.createElement("Kontinenteak");
+                doc.appendChild(root);
 
-                kontinenteElement.setAttribute("izena", kontinentea.getIzenaString());
-                kontinenteElement.setAttribute("azalera", String.valueOf(kontinentea.getSuperficie()));
-                kontinenteElement.setAttribute("herrialdeakKop", String.valueOf(kontinentea.getPais_Kop()));
-                kontinenteElement.setAttribute("biztanleria", String.valueOf(kontinentea.getPoblazioa()));
+                for (Kontinenteak kontinentea : kontinenteaks) {
+                    Element kontinenteElement = doc.createElement("Kontinentea");
+                    root.appendChild(kontinenteElement);
 
-                for (Herriak herria : herriakList) {
-                    if (herria.getKontinentea().equals(kontinentea)) {
-                        Element herriaElement = doc.createElement("Herria");
-                        kontinenteElement.appendChild(herriaElement);
+                    kontinenteElement.setAttribute("izena", kontinentea.getIzenaString());
+                    kontinenteElement.setAttribute("azalera", String.valueOf(kontinentea.getSuperficie()));
+                    kontinenteElement.setAttribute("herrialdeakKop", String.valueOf(kontinentea.getPais_Kop()));
+                    kontinenteElement.setAttribute("biztanleria", String.valueOf(kontinentea.getPoblazioa()));
 
-                        herriaElement.setAttribute("kodea", herria.getKodeaString());
-                        herriaElement.setAttribute("izena", herria.getIzenaString());
-                        herriaElement.setAttribute("populazioa", String.valueOf(herria.getPoblazioa()));
-                        herriaElement.setAttribute("kapitala", herria.getKapitala());
-                        herriaElement.setAttribute("BiziEsperantza", String.valueOf(herria.getBiziEsperantza()));
-                        herriaElement.setAttribute("SortzeData", herria.getDataSortuDate().format(DateTimeFormatter.ISO_DATE));
+                    for (Herriak herria : herriakList) {
+                        if (herria.getKontinentea().equals(kontinentea)) {
+                            Element herriaElement = doc.createElement("Herria");
+                            kontinenteElement.appendChild(herriaElement);
+
+                            herriaElement.setAttribute("kodea", herria.getKodeaString());
+                            herriaElement.setAttribute("izena", herria.getIzenaString());
+                            herriaElement.setAttribute("populazioa", String.valueOf(herria.getPoblazioa()));
+                            herriaElement.setAttribute("kapitala", herria.getKapitala());
+                            herriaElement.setAttribute("BiziEsperantza", String.valueOf(herria.getBiziEsperantza()));
+                            herriaElement.setAttribute("SortzeData", herria.getDataSortuDate().format(DateTimeFormatter.ISO_DATE));
+                        }
                     }
                 }
             }
 
-  
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml"));
+            StreamResult result = new StreamResult(xmlFile);
 
             transformer.transform(source, result);
 
-            System.out.println("Xml fitxategia ondo sortu da: kontinenteak.xml");
+            System.out.println("Xml fitxategia ondo sortu/eguneratu da: " + xmlFile.getAbsolutePath());
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -119,35 +119,78 @@ public class HerrialdeakKudeatu {
         ErakutsiErabilgarriKontinenteak();
 
         
-        System.out.print("Sartu Herriaren Kodea: ");
-        String codigo = scanner.nextLine();
+        String codigo;
+        do {
+            System.out.print("Sartu Herriaren Kodea (zenbakia bakarrik): ");
+            codigo = scanner.nextLine();
+        } while (!codigo.matches("\\d+")); 
         
-        System.out.print("Sartu Herriaren izena: ");
-        String nombrePais = scanner.nextLine();
+        String nombrePais;
+        do {
+            System.out.print("Sartu Herriaren izena (letrak bakarrik): ");
+            nombrePais = scanner.nextLine();
+        } while (!nombrePais.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+"));
         
-        System.out.print("Sartu bizi esperantza: ");
-        int esperanzaVida = scanner.nextInt();
+        int esperanzaVida = -1;
+        do {
+            System.out.print("Sartu bizi esperantza (zenbakia): ");
+            if (scanner.hasNextInt()) {
+                esperanzaVida = scanner.nextInt();
+                scanner.nextLine(); 
+            } else {
+                System.out.println("Errorea: Mesedez, zenbaki bat sartu.");
+                scanner.nextLine(); 
+            }
+        } while (esperanzaVida <= 0);
         
-        System.out.print("Sartu Poblazioa: ");
-        double poblacion = scanner.nextDouble();
         
-        System.out.print("Sartu kapitala: ");
-        scanner.nextLine();
-        String capital = scanner.nextLine();
+        double poblacion = -1;
+        do {
+            System.out.print("Sartu Poblazioa (zenbakia): ");
+            if (scanner.hasNextDouble()) {
+                poblacion = scanner.nextDouble();
+                scanner.nextLine(); 
+            } else {
+                System.out.println("Errorea: Mesedez, zenbaki bat sartu.");
+                scanner.nextLine();
+            }
+        } while (poblacion <= 0);
         
-        System.out.print("Sartu sortze data (formatua: yyyy-MM-dd): ");
-        String fechaIndependencia = scanner.nextLine();
         
+        String capital;
+        do {
+            System.out.print("Sartu kapitala (letrak bakarrik): ");
+            capital = scanner.nextLine();
+        } while (!capital.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+"));
         
-        LocalDate fecha = LocalDate.parse(fechaIndependencia, DateTimeFormatter.ISO_DATE);
+        LocalDate fecha = null;
+        do {
+            System.out.print("Sartu sortze data (formatua: yyyy-MM-dd): ");
+            String fechaIndependencia = scanner.nextLine();
+            try {
+                fecha = LocalDate.parse(fechaIndependencia, DateTimeFormatter.ISO_DATE);
+            } catch (Exception e) {
+                System.out.println("Errorea: Data formatu okerra. Erabili yyyy-MM-dd formatua.");
+            }
+        } while (fecha == null);
 
        
-        System.out.print("Sartu nahi duzun kontinentearen zenbakia: ");
-        int continenteIndex = scanner.nextInt();
+        int continenteIndex = -1;
+        do {
+            System.out.print("Sartu nahi duzun kontinentearen zenbakia: ");
+            if (scanner.hasNextInt()) {
+                continenteIndex = scanner.nextInt();
+                scanner.nextLine();
+            } else {
+                System.out.println("Errorea: Kontinente zenbakia egokia sartu behar duzu.");
+                scanner.nextLine(); 
+            }
+        } while (continenteIndex <= 0);
 
         try {
             
-            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+        	String desktopPath = System.getProperty("user.home") + "/Desktop/kontinenteak.xml";
+            File xmlFile = new File(desktopPath);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
@@ -183,10 +226,77 @@ public class HerrialdeakKudeatu {
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml"));
+            StreamResult result = new StreamResult(xmlFile);
             transformer.transform(source, result);
 
             System.out.println("Herri berria ondo gehitu da ondorengo kontinentera: " + continenteElement.getAttribute("izena") + ".");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void BilatuHerriaKodea() {
+        try {
+            
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Sartu herriaren kodea: ");
+            String inputCodigo = scanner.nextLine();
+
+           
+            if (!inputCodigo.matches("\\d+")) {
+                System.out.println("Kodea zenbaki bat izan behar da.");
+                return;
+            }
+
+            String desktopPath = System.getProperty("user.home") + "/Desktop/kontinenteak.xml";
+            File xmlFile = new File(desktopPath);
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(xmlFile);
+
+            doc.getDocumentElement().normalize();
+
+           
+            NodeList kontinenteakList = doc.getElementsByTagName("Kontinentea");
+
+      
+            for (int i = 0; i < kontinenteakList.getLength(); i++) {
+                Element kontinenteaElement = (Element) kontinenteakList.item(i);
+                String kontinenteIzena = kontinenteaElement.getAttribute("izena");
+
+              
+                NodeList herriakList = kontinenteaElement.getElementsByTagName("Herria");
+
+           
+                for (int j = 0; j < herriakList.getLength(); j++) {
+                    Element herriaElement = (Element) herriakList.item(j);
+                    String codigoPais = herriaElement.getAttribute("kodea");
+
+                   
+                    if (codigoPais.equals(inputCodigo)) {
+                        String izena = herriaElement.getAttribute("izena");
+                        String populazioa = herriaElement.getAttribute("populazioa");
+                        String kapitala = herriaElement.getAttribute("kapitala");
+                        String sortzeData = herriaElement.getAttribute("SortzeData");
+                        String biziEsperantza = herriaElement.getAttribute("BiziEsperantza");
+
+                       
+                        System.out.println("\n=========================================");
+                        System.out.println("Informazioa: " + izena);
+                        System.out.println("Kontinentea: " + kontinenteIzena); 
+                        System.out.println("=========================================");
+                        System.out.printf("%-20s %-15s %-20s %-15s %-20s%n", 
+                                "Izena", "Poblazioa", "Kapitala", "SortzeData", "Bizi Esperantza");
+                        System.out.println("-------------------------------------------------------------------------------");
+                        System.out.printf("%-20s %-15s %-20s %-15s %-20s%n",
+                                izena, populazioa, kapitala, sortzeData, biziEsperantza);
+                        return; 
+                    }
+                }
+            }
+
+          
+            System.out.println("Ez da aurkitu herri hau kodearekin: " + inputCodigo);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,7 +305,8 @@ public class HerrialdeakKudeatu {
     public void BilatuEtaErakutsiKodeBidez() {
         try {
           
-            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+        	String desktopPath = System.getProperty("user.home") + "/Desktop/kontinenteak.xml";
+            File xmlFile = new File(desktopPath);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
@@ -269,7 +380,8 @@ public class HerrialdeakKudeatu {
     public void ErakutsiErabilgarriKontinenteak() {
         try {
            
-            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+        	String desktopPath = System.getProperty("user.home") + "/Desktop/kontinenteak.xml";
+            File xmlFile = new File(desktopPath);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
@@ -294,7 +406,8 @@ public class HerrialdeakKudeatu {
     public void BilatuEtaErakutsiPalabraClave() {
         try {
            
-            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+        	String desktopPath = System.getProperty("user.home") + "/Desktop/kontinenteak.xml";
+            File xmlFile = new File(desktopPath);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
@@ -356,7 +469,8 @@ public class HerrialdeakKudeatu {
     public void ErakutsiXML() {
         try {
             
-            File xmlFile = new File("C:\\Users\\2ag3.iorilope\\Desktop\\kontinenteak.xml");
+        	String desktopPath = System.getProperty("user.home") + "/Desktop/kontinenteak.xml";
+            File xmlFile = new File(desktopPath);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
